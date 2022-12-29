@@ -1,3 +1,26 @@
+ANALISIS PREVIO
+	- DEFINIR PROYECTO
+		VER PDF A3A Y A3B en carpeta INSTRUCCIONES
+
+	- PREPARAR PROYECTO PARA INICIO
+		(la clase GameControler mezcla la lógica de negocio y la lógica
+			de presentación, )
+
+	- MODIFICAR PROYECTO SEGÚN INSTRUCCIONES
+		Crear nuevas clases que sustituyan GameController, con capas
+		independientes de lógica y presentación
+			- lógica del negocio: analiza la información (BACKEND):
+				- Recibe los datos
+				- Prepara la salida en datos
+			- lógica de presentación: Se encarga de la comunicación con cliente (FRONTEND)
+				- Pide y recibe informaciónn al cliente
+				- Se la muestra de forma cómoda
+
+DEFINIR PROYECTO (HECHO)
+PREPARAR PROYECTO PARA INICIO (HECHO)
+MODIFICAR PROYECTO SEGÚN INSTRUCCIONES (EN PROGRESO)
+
+
 - Creamos proyecto sieteymedio según las instrucciones pdf 03b
 	- Creamos proyecto java en visual code:
 		- Cremos projecto java + no build tools + nombre
