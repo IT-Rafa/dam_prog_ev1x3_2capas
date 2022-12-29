@@ -57,18 +57,22 @@ public class GameControler {
 
     void turnoJugador() {
         char opc = 'C';
+
         // obligamos a que como mínimo se tenga 1 carta
         System.out.println("Como mínimo recibes una carta, luego puedes decidir si seguir o plantarte");
         while (valorCartas(cartasJugador) < 7.5 && opc == 'C') {
             Carta c = baraja.darCartas(1)[0];
+
             // insertamos c en las cartas del jugador
             insertarCartaEnArray(cartasJugador, c);
+
             // mostramos cartas y su valor, si se pasa se sale del bucle
             System.out.println("Éstas son tus cartas jugador:");
             mostrarCartas(cartasJugador);
             double valor = valorCartas(cartasJugador);
             System.out.println("\n\tValor de cartas: " + valor);
             if (valor < 7.5) {
+
                 // suponemos que el usuario teclea bien !!!
                 System.out.println("\n¿Pides [C]arta o te [P]lantas?");
                 opc = sc.next().trim().toUpperCase().charAt(0);
@@ -77,6 +81,7 @@ public class GameControler {
     }
 
     void turnoBanca() {
+        
         // lo primero es consultar el valor que alcanzó el jugador en su turno
         double valorCartasJugador = valorCartas(cartasJugador);
         if (valorCartasJugador > 7.5) {
