@@ -48,10 +48,12 @@
 	que InterfaceConsola quiere imprimir las cartas que tiene en un momento
 	dado el Jugador ¿Cómo le pasa SieteYMedia esta información a
 	interfaceConsola?.
+
 	SieteYMedia puede devolver un simple String para que lo imprima 
 	InterfaceConsola o bien una estructura más compleja como un array de cartas.
 	La primera es muy sencilla y clara pero la segunda es más flexible ya que no 
-	limita a InterfaceConsola a imprimir un String concreto. Usa la segunda.
+	limita a InterfaceConsola a imprimir un String concreto.
+	Usa la segunda.
 
 	4. Otra cuestión importante en la comunicación entre clases es que 
 	InterfaceConsola tiene que preguntar a SieteYMedio si se acabó o no 
