@@ -4,34 +4,21 @@ import java.util.Scanner;
 
 // lógica de presentación.
 public class InterfaceConsola {
-
     private Scanner sc = new Scanner(System.in);
-    private SieteYMedia game = new SieteYMedia();
+
+    private SieteYMedia game;
 
     public static void main(String[] args) {
         new InterfaceConsola();
+        
     }
 
     public InterfaceConsola() {
+        game = new SieteYMedia(this);
         presentarJuego();
-        game.jugar();
-        showMsg("Adios", true);
+        jugar();
     }
 
-    private void showMsg(String msg, boolean line){
-        if(line == true){
-            System.out.println(msg);
-        }else{
-            System.out.print(msg);
-        }
-       
-    }
-
-    private String askData(String askMsg){
-        showMsg(askMsg, false);
-        return sc.nextLine();
-    }
-    
     void presentarJuego() {
         System.out.println("- El usuario es el jugador y el ordenador la banca.");
         System.out.println("- No hay en la baraja 8s y 9s. El 10 es la sota, el 11 el caballo y el 12 el Rey.");
@@ -51,5 +38,32 @@ public class InterfaceConsola {
         System.out.println(
                 "- En este proceso puede ocurrir que la banca 'se pase' y entonces pierde la banca y gana el jugador.");
         System.out.println("\nEmpecemos!!!\n");
+    }
+
+    void jugar() {
+        game.turnoJugador();
+        game.turnoBanca();
+        System.out.println("Adios");
+    }
+
+    public void showUser(String msg) {
+            System.out.println(msg);
+        
+    }
+    public void showUser(String msg, boolean newLine) {
+        if (newLine == true) {
+            System.out.println(msg);
+        } else {
+            System.out.print(msg);
+        }
+    }
+
+    public String askUser(String msg, boolean newLine) {
+        if (newLine == true) {
+            System.out.println(msg);
+        } else {
+            System.out.print(msg);
+        }
+        return sc.nextLine().trim().toUpperCase();
     }
 }

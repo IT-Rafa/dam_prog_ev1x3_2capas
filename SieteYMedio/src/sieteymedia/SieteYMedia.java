@@ -4,20 +4,27 @@ import recursos.*;
 
 // lógica de negocio
 public class SieteYMedia {
-    Baraja baraja;
-    Carta[] cartasJugador;
-    Carta[] cartasBanca;
+    private Baraja baraja;
+    private Carta[] cartasJugador;
+    private Carta[] cartasBanca;
+    InterfaceConsola inter;
 
-    void jugar() {
-        turnoJugador();
-        turnoBanca();
-        
+    public SieteYMedia(InterfaceConsola inter){
+        this.baraja = new Baraja();
+        this.baraja.barajar();
+        // se van pidiendo cartas al jugar pero matemáticamente a partir de 15 siempre
+        // nos pasamos
+        // hay 12 cartas de medio puntos, si sacara estas 12 luego cartas con valor 1
+        // vemos que a partir de 15 cartas siempre se pasas
+        this.cartasJugador = new Carta[15];
+        this.cartasBanca = new Carta[15];
+        this.inter = inter;
     }
-    void turnoJugador() {
-        char opc = 'C';
 
-        // obligamos a que como mínimo se tenga 1 carta
-        System.out.println("Como mínimo recibes una carta, luego puedes decidir si seguir o plantarte");
+    public void turnoJugador(){
+        char opc = 'C';
+        inter.showUser("Como mínimo recibes una carta, luego puedes decidir si seguir o plantarte");
+
         while (valorCartas(cartasJugador) < 7.5 && opc == 'C') {
             Carta c = baraja.darCartas(1)[0];
 
@@ -25,40 +32,40 @@ public class SieteYMedia {
             insertarCartaEnArray(cartasJugador, c);
 
             // mostramos cartas y su valor, si se pasa se sale del bucle
-            System.out.println("Éstas son tus cartas jugador:");
+            inter.showUser("Éstas son tus cartas jugador:");
             mostrarCartas(cartasJugador);
             double valor = valorCartas(cartasJugador);
-            System.out.println("\n\tValor de cartas: " + valor);
+            inter.showUser("\n\tValor de cartas: " + valor);
             if (valor < 7.5) {
 
                 // suponemos que el usuario teclea bien !!!
-                System.out.println("\n¿Pides [C]arta o te [P]lantas?");
-                opc = sc.next().trim().toUpperCase().charAt(0);
+                opc = inter.askUser("\n¿Pides [C]arta o te [P]lantas? ", false).charAt(0);
             }
         }
     }
+    
 
     void turnoBanca() {
         
         // lo primero es consultar el valor que alcanzó el jugador en su turno
         double valorCartasJugador = valorCartas(cartasJugador);
         if (valorCartasJugador > 7.5) {
-            System.out.println("Jugador, te has pasado en tu jugada anterior, gana la banca");
+            inter.showUser("Jugador, te has pasado en tu jugada anterior, gana la banca", true);
             return;
         }
-        System.out.println("\n\nTurno de banca ...");
+        inter.showUser("\n\nTurno de banca ...", true);
         // juega hasta empatar o superar
         while (valorCartas(cartasBanca) < valorCartasJugador) {
             Carta c = baraja.darCartas(1)[0];
             insertarCartaEnArray(cartasBanca, c);
         }
-        System.out.println("Éstas son mis cartas:");
+        inter.showUser("Éstas son mis cartas:", true);
         mostrarCartas(cartasBanca);
-        System.out.println("\nValor de mis cartas(banca): " + valorCartas(cartasBanca));
+        inter.showUser("\nValor de mis cartas(banca): " + valorCartas(cartasBanca), true);
         if (valorCartas(cartasBanca) > 7.5) {
-            System.out.println("me pasé, ganas tú,jugador");
+            inter.showUser("me pasé, ganas tú,jugador", true);
         } else {
-            System.out.println("Gana la banca");
+            inter.showUser("Gana la banca", true);
         }
     }
 
@@ -86,7 +93,7 @@ public class SieteYMedia {
     void mostrarCartas(Carta[] cartas) {
         int i = 0;
         while (cartas[i] != null) {
-            System.out.print("\t" + cartas[i]);
+            inter.showUser("\t" + cartas[i], true);
             i++;
         }
     }
