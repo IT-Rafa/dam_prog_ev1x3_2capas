@@ -2,16 +2,15 @@ package sieteymedia;
 
 import java.util.Scanner;
 
-// lógica de presentación.
 /**
  * Lógica presentación sieteymedia.
  * incluye un main para ejecutarlo.
  * Inicia el juego, Muestra los mensajes y pide datos por texto en consola.
  * 
- * Nota: Le añadi iterface para que poder usar otras clases con misma interface 
+ * Nota: Le añadi iterface para que poder usar otras clases con misma interface
  */
 public class InterfaceConsola implements Inter {
-    // ATTRIBUTTES
+    // ATTRIBUTES
     // Consola donde se ejecuta
     private Scanner sc = new Scanner(System.in);
 
@@ -24,10 +23,11 @@ public class InterfaceConsola implements Inter {
         InterfaceConsola gameConsola = new InterfaceConsola();
         gameConsola.inicio();
     }
+
     // CLASS METHODS
 
     /**
-     * Arranca juego y se despide
+     * Arranca juego y se despide por consola
      */
     public void inicio() {
         game.jugar();
@@ -37,7 +37,7 @@ public class InterfaceConsola implements Inter {
     /**
      * Muestra el mensaje por consola, con o sin salto de línea
      * 
-     * @param msg String con mensaje a mostrar
+     * @param msg     String con mensaje a mostrar
      * @param newLine boolean que indica si habrá salto línea al final
      */
     public void showUser(String msg, boolean newLine) {
@@ -54,14 +54,14 @@ public class InterfaceConsola implements Inter {
      * @param msg String con mensaje a mostrar
      */
     public void showUser(String msg) {
-        showUser( msg, true);
+        showUser(msg, true);
     }
 
     /**
-     * Muestra mensaje por consola, con o sin salto de línea, y espera 
+     * Muestra mensaje por consola, con o sin salto de línea, y espera
      * respuesta usuario
      * 
-     * @param msg String con mensaje a mostrar
+     * @param msg     String con mensaje a mostrar
      * @param newLine boolean que indica si habrá salto línea al final
      * @return String con la respuesta del usuario
      */
@@ -75,10 +75,10 @@ public class InterfaceConsola implements Inter {
     }
 
     /**
-     * Muestra mensaje por consola con salto de línea y espera 
+     * Muestra mensaje por consola con salto de línea y espera
      * respuesta usuario
      * 
-     * @param msg String con mensaje a mostrar
+     * @param msg     String con mensaje a mostrar
      * @param newLine boolean que indica si habrá salto línea al final
      * @return String con la respuesta del usuario
      */

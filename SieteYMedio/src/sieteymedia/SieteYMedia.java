@@ -2,33 +2,51 @@ package sieteymedia;
 
 import recursos.*;
 
-// lógica de negocio
+/**
+ * lógica de negocio.
+ * Prepara e inicia el juego partida sieteymedio
+ */
 public class SieteYMedia {
-    // ATRIBUTTOS
-    private Baraja baraja; 
+    // ATTRIBUTES
+    private Baraja baraja;
     private Carta[] cartasJugador;
     private Carta[] cartasBanca;
     private Inter inter;
+    // se van pidiendo cartas al jugar pero matemáticamente a partir de 15 siempre
+    // nos pasamos
+    // hay 12 cartas de medio puntos, si sacara estas 12 luego cartas con valor 1
+    // vemos que a partir de 15 cartas siempre se pasas
+    private final int MAXCARTAS = 15;
 
+    // CONSTRUCTORS
+    /**
+     * Prepara partida. Baraja y prepara cartas usuarios
+     * 
+     * @param inter Objeto con interface inter para interactuar con usuario
+     */
+    public SieteYMedia(Inter inter) {
+        this.baraja = new Baraja();
+        this.baraja.barajar();
+
+        this.cartasJugador = new Carta[MAXCARTAS];
+        this.cartasBanca = new Carta[MAXCARTAS];
+        this.inter = inter;
+    }
+
+    // METHODS
+    /**
+     * Presenta juego y los turnos partida
+     */
     public void jugar() {
         presentarJuego();
         turnoJugador();
         turnoBanca();
     }
 
-    public SieteYMedia(InterfaceConsola inter) {
-        this.baraja = new Baraja();
-        this.baraja.barajar();
-        // se van pidiendo cartas al jugar pero matemáticamente a partir de 15 siempre
-        // nos pasamos
-        // hay 12 cartas de medio puntos, si sacara estas 12 luego cartas con valor 1
-        // vemos que a partir de 15 cartas siempre se pasas
-        this.cartasJugador = new Carta[15];
-        this.cartasBanca = new Carta[15];
-        this.inter = inter;
-    }
-
-    public void presentarJuego() {
+    /**
+     * Muestra información de cómo funciona el sieteymedio
+     */
+    private void presentarJuego() {
         inter.showUser("- El usuario es el jugador y el ordenador la banca.\n" +
                 "- No hay en la baraja 8s y 9s. El 10 es la sota, el 11 el caballo y el 12 el Rey.\n" +
                 "- las figuras (10-sota, 11-caballo y 12-rey) valen medio punto y, el resto, su valor.\n" +
@@ -49,77 +67,124 @@ public class SieteYMedia {
                 "\nEmpecemos!!!\n");
     }
 
-    public void turnoJugador() {
+    /**
+     * Turno usuario. Usuario recibe carta, se muestra el valor y le pregunta si
+     * quiere pedir mas,
+     * salvo que el valor de las cartas pase de 7 y medio.
+     */
+    private  void turnoJugador() {
         char opc = 'C';
         inter.showUser("Como minimo recibes una carta, luego puedes decidir si seguir o plantarte");
 
         while (valorCartas(cartasJugador) < 7.5 && opc == 'C') {
+            // Cogemos la carta a repartir
             Carta c = baraja.darCartas(1)[0];
 
-            // insertamos c en las cartas del jugador
+            // Añadimos esa carta en las cartas del jugador
             insertarCartaEnArray(cartasJugador, c);
 
-            // mostramos cartas y su valor, si se pasa se sale del bucle
+            // Mostramos cartas del jugador
             inter.showUser("Estas son tus cartas jugador:");
             mostrarCartas(cartasJugador);
+
+            // Mostramos valor
             double valor = valorCartas(cartasJugador);
             inter.showUser("\n\tValor de cartas: " + valor);
+
+            // Si es inferior a 7 y medio, pregunta al usuario si quiere otra
             if (valor < 7.5) {
                 // suponemos que el usuario teclea bien !!!
-                opc = inter.askUser("\nPides [C]arta o te [P]lantas ? ", false).charAt(0);
+                opc = inter.askUser("\nPides [C]arta o te [P]lantas ? ",
+                        false).charAt(0);
             }
         }
     }
 
-    void turnoBanca() {
+    /**
+     * Turno banca. Banca pide carta hasta alcanzar mínimo el valor de las cartas
+     * del jugador.
+     * Si supera siete y medio, pierde.
+     */
+    private void turnoBanca() {
 
-        // lo primero es consultar el valor que alcanzó el jugador en su turno
+        // Comprobamos valor cartas jugador
         double valorCartasJugador = valorCartas(cartasJugador);
+        // Si jugador supero el siete y medio. Gana banca y finaliza partida
         if (valorCartasJugador > 7.5) {
-            inter.showUser("Jugador, te has pasado en tu jugada anterior, gana la banca", true);
+            inter.showUser("Jugador, te has pasado en tu jugada anterior, gana la banca");
             return;
         }
-        inter.showUser("\n\nTurno de banca ...", true);
+        // En caso que no, banca pide carta hasta alcanzar valor cartas jugador, mínimo
+        inter.showUser("\n\nTurno de banca ...");
+
         // juega hasta empatar o superar
         while (valorCartas(cartasBanca) < valorCartasJugador) {
             Carta c = baraja.darCartas(1)[0];
             insertarCartaEnArray(cartasBanca, c);
         }
-        inter.showUser("Estas son mis cartas:", true);
+
+        // Mostramos lista de cartas de jugador banca
+        inter.showUser("Estas son mis cartas:");
         mostrarCartas(cartasBanca);
-        inter.showUser("\nValor de mis cartas(banca): " + valorCartas(cartasBanca), true);
+        inter.showUser("\nValor de mis cartas(banca): " + valorCartas(cartasBanca));
+
+        // Comprobamos si se supero siete y medio. si lo hizo, gana jugador,
+        // si no, gana banca
         if (valorCartas(cartasBanca) > 7.5) {
-            inter.showUser("me pase, ganas tu, jugador", true);
+            inter.showUser("me pase, ganas tu, jugador");
         } else {
-            inter.showUser("Gana la banca", true);
+            inter.showUser("Gana la banca");
         }
     }
 
-    double valorCartas(Carta[] cartas) {
+    /**
+     * Devuelve el valor de una lista de cartas de jugador
+     * 
+     * @param cartas lista de cartas de jugador a contar
+     * @return double con valor de las cartas
+     */
+    private double valorCartas(Carta[] cartas) {
         double total = 0.0;
         int val;
         int i = 0;
+        // Recorremos cartas jugasdor hasta que encontrarnos con carta null
         while (cartas[i] != null) {
+            // Cogemos número de la carta
             val = cartas[i].getNumero();
+            // Añadimos el número o 0.5, según valor y sumamos al total
             total += (val > 7) ? 0.5 : val;
             i++;
         }
         return total;
     }
 
-    void insertarCartaEnArray(Carta[] cartas, Carta c) {
+    /**
+     * Añade carta a una lista de cartas de jugador
+     * 
+     * @param cartas lista cartas jugador
+     * @param c      carta a añadir
+     */
+    private void insertarCartaEnArray(Carta[] cartas, Carta c) {
         // inserta al final detectando el primer null
         int i = 0;
+        // llega a la primera carta null
         while (cartas[i] != null) {
             i++;
         }
+        // Añade carta
         cartas[i] = c;
     }
 
-    void mostrarCartas(Carta[] cartas) {
+    /**
+     * Mostramso las cartas de una lista de cartas de jugador
+     * 
+     * @param cartas lista cartas jugador
+     */
+    private void mostrarCartas(Carta[] cartas) {
         int i = 0;
+        // llega a la primera carta null
         while (cartas[i] != null) {
-            inter.showUser("\t" + cartas[i], true);
+            inter.showUser("\t" + cartas[i]);
             i++;
         }
     }
